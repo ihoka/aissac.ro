@@ -143,6 +143,39 @@
     display: none !important;
   }
 
+  /* ------------------------------------------------------------ nav states */
+  .site-header {
+    transition-property: background-color, border-color, box-shadow, backdrop-filter;
+    transition-duration: var(--duration);
+    transition-timing-function: ease;
+  }
+  /* Set by JS only: without JS the nav stays in its readable scrolled state. */
+  .site-header[data-at-top] {
+    background-color: transparent;
+    border-bottom-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .nav-link[aria-current] {
+    color: var(--text);
+    text-decoration-line: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 8px;
+  }
+
+  /* Body scroll lock while the menu sheet is open. */
+  .menu-open,
+  .menu-open body {
+    overflow: hidden;
+  }
+  /* A section focused after a menu jump is a reading position, not a control. */
+  main[tabindex="-1"]:focus,
+  section[tabindex="-1"]:focus {
+    outline: none;
+  }
+
   /* ------------------------------------------------------------ mobile menu sheet */
   .mobile-menu {
     position: fixed;
@@ -363,6 +396,40 @@
       writing-mode: vertical-rl;
       justify-content: center;
     }
+  }
+
+  /* ------------------------------------------------------------ draw-in
+   * .draw-pending is added by JS only when motion is allowed, so without JS
+   * or under reduced motion everything is simply drawn.
+   * 600ms ease-out, 80ms stagger via --n.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .draw-pending .dg-join,
+    .draw-pending .rail-line,
+    .draw-pending .rail-end {
+      transition: transform var(--duration-draw) ease-out;
+      transition-delay: calc(var(--n, 0) * var(--stagger));
+    }
+    /* Horizontal joins grow from the left, vertical ones from the top. */
+    .draw-pending .dg-join-model,
+    .draw-pending .dg-join-part { transform-origin: left center; }
+    .draw-pending .dg-join-ai,
+    .draw-pending .dg-join-spine,
+    .draw-pending .dg-dim { transform-origin: center top; }
+    .draw-pending:not(.is-drawn) .dg-join-model,
+    .draw-pending:not(.is-drawn) .dg-join-part { transform: scaleX(0); }
+    .draw-pending:not(.is-drawn) .dg-join-ai,
+    .draw-pending:not(.is-drawn) .dg-join-spine,
+    .draw-pending:not(.is-drawn) .dg-dim { transform: scaleY(0); }
+
+    .draw-pending .rail-line { transform-origin: center top; }
+    .draw-pending:not(.is-drawn) .rail-line,
+    .draw-pending:not(.is-drawn) .rail-end { transform: scaleY(0); }
+    .draw-pending .rail-end { transform-origin: center top; }
+  }
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1080px) {
+    .draw-pending .rail-line { transform-origin: left center; }
+    .draw-pending:not(.is-drawn) .rail-line { transform: scaleX(0); }
   }
 
   /* ------------------------------------------------------------ work rows */

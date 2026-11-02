@@ -18,7 +18,7 @@
   </nav>
 </header>
 
-<dialog id="mobile-menu" class="mobile-menu" aria-label="{{ nav.mobile_label }}">
+<dialog id="mobile-menu" class="mobile-menu" aria-label="{{ nav.menu_button }}">
   <div class="flex h-nav items-center justify-between border-b border-rule px-5">
     {% include wordmark.html size="text-mark-nav" %}
     <button type="button" class="menu-close btn btn-secondary h-btn-nav gap-[10px] border-text-2 px-[14px] text-ui">
@@ -31,6 +31,6 @@
     <a class="menu-link flex min-h-menu-row items-center justify-between border-b border-rule font-display text-menu-link font-bold text-text no-underline hover:text-accent"
        href="{{ '/' | relative_url }}{{ link.href }}">{{ link.label }}<span class="font-mono text-mono font-normal text-muted">{{ link.index }}</span></a>
     {%- endfor %}
-    <a class="menu-link btn btn-primary mt-6 w-full" href="{{ '/' | relative_url }}{{ nav.cta.href }}">{{ nav.cta.label }}</a>
+    <a class="menu-link btn btn-primary mt-6 h-btn w-full" href="{{ '/' | relative_url }}{{ nav.cta.href }}">{{ nav.cta.label }}</a>
   </nav>
 </dialog>
