@@ -1,4 +1,6 @@
 name = "aissac-contact"
+# The aissac.ro Cloudflare account (the login covers several).
+account_id = "ea05ccb8c8b34e1aa3e1e9178c0a0da9"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
 workers_dev = true

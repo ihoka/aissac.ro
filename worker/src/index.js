@@ -193,11 +193,21 @@ export async function verifyTurnstile(token, ip, env) {
   // Cloudflare's public test keys answer with hostname "example.com" and no
   // action. Accept that only where ALLOW_TEST_KEYS is set (local .dev.vars).
   const testKey = env.ALLOW_TEST_KEYS === "1" && result?.metadata?.result_with_testing_key === true;
-  return (
+  const ok =
     result?.success === true &&
     hostnames.has(result.hostname) &&
-    (result.action === env.TURNSTILE_ACTION || testKey)
-  );
+    (result.action === env.TURNSTILE_ACTION || testKey);
+  if (!ok) {
+    // Diagnostics for `wrangler tail`; never the token or the secret.
+    // "invalid-input-secret" means TURNSTILE_SECRET is wrong.
+    console.warn("turnstile rejected", JSON.stringify({
+      success: result?.success,
+      errors: result?.["error-codes"],
+      hostname: result?.hostname,
+      action: result?.action,
+    }));
+  }
+  return ok;
 }
 
 async function sendEmail(env, { to, reply_to, subject, text }) {
