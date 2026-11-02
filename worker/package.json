@@ -1,0 +1,14 @@
+{
+  "name": "aissac-contact",
+  "private": true,
+  "type": "module",
+  "description": "Contact form Worker for aissac.ro: Turnstile, honeypot, time check, rate limit, Resend",
+  "scripts": {
+    "test": "node --test test/",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.156.1"
+  }
+}
