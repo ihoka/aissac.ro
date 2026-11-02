@@ -1,0 +1,5 @@
+# Local development overrides: bundle exec jekyll build --config _config.yml,_config.dev.yml
+# Points the form at `wrangler dev` and uses Cloudflare's public Turnstile test site key (always passes).
+url: "http://127.0.0.1:4100"
+contact_endpoint: "http://127.0.0.1:8787/contact"
+turnstile_site_key: "1x00000000000000000000AA"
