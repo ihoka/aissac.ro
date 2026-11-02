@@ -30,6 +30,7 @@ module.exports = {
       transparent: "transparent",
       current: "currentColor",
       base: token("base"),
+      sunk: token("sunk"),
       surface: token("surface"),
       raised: token("raised"),
       "raised-hover": token("raised-hover"),
@@ -58,23 +59,31 @@ module.exports = {
       extrabold: "800",
     },
     fontSize: {
-      // Role: [size, line-height], desktop / mobile per spec section 2.
-      hero: [fluid(52, 80), { lineHeight: "1" }],
+      // [size, line-height]. Desktop / mobile values from boards 5 and 6,
+      // fluid between 390 and 1440 where they differ.
+      hero: [fluid(52, 80), { lineHeight: "0.95" }],
       h2: [fluid(44, 64), { lineHeight: "1" }],
-      "section-h2": [fluid(32, 40), { lineHeight: "1.1" }], // 40 / 44
-      h3: ["1.375rem", { lineHeight: "1.75rem" }], // 22 / 28
-      body: ["1.125rem", { lineHeight: "1.875rem" }], // 18 / 30
-      small: ["0.875rem", { lineHeight: "1.375rem" }], // 14 / 22
-      mono: ["0.8125rem", { lineHeight: "1.25rem" }], // 13 / 20
-      // Component sizes named in section 3 and 5.
-      input: ["1rem", { lineHeight: "1.5rem" }], // 16, no iOS zoom
-      label: ["0.9375rem", { lineHeight: "1.375rem" }], // 15
-      button: ["1rem", { lineHeight: "1.25rem" }], // 15 to 17
-      "work-name": ["1.625rem", { lineHeight: "1.1" }], // 26
+      h3: [fluid(30, 40), { lineHeight: "1.05" }], // service cards, process steps
+      "work-name": [fluid(28, 32), { lineHeight: "1.1" }],
+      clients: [fluid(30, 40), { lineHeight: "1.1" }], // track record names
+      signature: [fluid(26, 30), { lineHeight: "1" }],
       "menu-link": ["2.25rem", { lineHeight: "1" }], // 36
-      // Wordmark: nav 36, mobile nav 30, footer 72. Letter-spacing +1%.
+      lead: [fluid(20, 26), { lineHeight: "1.5" }], // about opener
+      lede: [fluid(17, 19), { lineHeight: "1.6" }], // hero paragraph
+      quote: [fluid(17, 19), { lineHeight: "1.7" }], // founder note
+      intro: [fluid(16, 18), { lineHeight: "1.6" }], // section subs, track record
+      body: [fluid(16, 17), { lineHeight: "1.6" }], // cards, steps
+      "body-sm": [fluid(15, 17), { lineHeight: "1.6" }], // work descriptions
+      ui: ["1rem", { lineHeight: "1.5" }], // 16: nav, footer, contact details
+      label: ["0.9375rem", { lineHeight: "1.375rem" }], // 15
+      small: ["0.875rem", { lineHeight: "1.375rem" }], // 14
+      mono: [fluid(12, 13), { lineHeight: "1.4" }],
+      button: ["1.0625rem", { lineHeight: "1.25rem" }], // 17
+      "button-sm": ["1rem", { lineHeight: "1.25rem" }], // 16, nav CTA
+      field: ["1.0625rem", { lineHeight: "1.55" }], // 17 (>= 16, no iOS zoom)
+      // Wordmark: Big Shoulders Stencil 800, letter-spacing +1%.
       "mark-nav": [fluid(30, 36), { lineHeight: "1", letterSpacing: "0.01em" }],
-      "mark-footer": ["4.5rem", { lineHeight: "1", letterSpacing: "0.01em" }],
+      "mark-footer": [fluid(64, 72), { lineHeight: "0.85", letterSpacing: "0.01em" }],
     },
     borderRadius: {
       none: "0",
@@ -100,6 +109,8 @@ module.exports = {
         "btn-pressed": "var(--shadow-btn-pressed)",
         field: "var(--shadow-field)",
         nav: "var(--shadow-nav)",
+        hl: "var(--shadow-hl)",
+        "hl-sm": "var(--shadow-hl-sm)",
       },
       transitionDuration: {
         DEFAULT: "150ms",
@@ -109,12 +120,15 @@ module.exports = {
         DEFAULT: "ease",
       },
       height: {
-        btn: "3rem", // 48
+        btn: "3.25rem", // 52 on the boards
         "btn-nav": "2.75rem", // 44
-        "btn-submit": "3.25rem", // 52
-        field: "3rem", // 48
-        "field-compact": "2.75rem", // 44
+        field: "3.25rem", // 52 on the boards
+        tap: "2.75rem", // 44 minimum touch target
         "menu-row": "4rem", // 64
+      },
+      minHeight: {
+        tap: "2.75rem",
+        "menu-row": "4rem",
       },
       scrollMargin: {
         anchor: "96px",

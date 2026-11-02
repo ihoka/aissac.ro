@@ -1,7 +1,7 @@
 /*
  * Tailwind entry and the design token file.
  * This is the ONLY file in the repo allowed to contain colour literals.
- * Source: docs/build-spec.md, section 2.
+ * Source: docs/build-spec.md section 2, refined by the Craft boards 5 to 8.
  */
 
 @tailwind base;
@@ -12,9 +12,10 @@
   :root {
     /* Colour */
     --base: #17130F;       /* 900  page ground */
+    --sunk: #1C1713;       /* process band, read-only fields (boards 5, 7) */
     --surface: #211B16;    /* 800  cards, raised sections */
     --raised: #2C251E;     /* 700  secondary buttons, insets */
-    --raised-hover: #352D25; /* secondary button hover ground (section 3) */
+    --raised-hover: #352D25; /* secondary button hover ground */
     --rule: #3D342A;       /* 600  hairlines, section dividers */
     --border: #75685A;     /* 500  input borders, diagram joins */
     --muted: #9C8F7E;      /* 400  captions, mono labels */
@@ -31,10 +32,15 @@
     --shadow-btn-pressed: inset 0 2px 0 rgba(23, 19, 15, 0.28);
     --shadow-field: inset 0 1px 2px rgba(0, 0, 0, 0.45);
     --shadow-nav: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-hl: inset 0 1px 0 rgba(242, 235, 223, 0.08);    /* top highlight on raised plates */
+    --shadow-hl-sm: inset 0 1px 0 rgba(242, 235, 223, 0.06); /* top highlight on cards, tags */
 
     /* Shape and motion */
     --radius: 3px;
-    --cut: 12px; /* 45 degree cut corner size; confirm against the comp in step 3 */
+    --cut-sm: 10px;  /* diagram plates */
+    --cut-md: 16px;  /* cards */
+    --cut-lg: 20px;  /* founder note */
+    --cut-photo: 14px;
     --duration: 150ms;
     --duration-draw: 600ms;
     --stagger: 80ms;
@@ -51,6 +57,10 @@
   @media (min-width: 720px) {
     :root {
       --nav-h: 80px;
+      --cut-sm: 12px;
+      --cut-md: 20px;
+      --cut-lg: 28px;
+      --cut-photo: 20px;
     }
   }
 
@@ -69,6 +79,10 @@
 
   body {
     @apply bg-base font-text text-body text-text-2 antialiased;
+  }
+
+  h1, h2, h3 {
+    @apply text-text;
   }
 
   /* Focus: on every interactive element, never removed. */
@@ -101,6 +115,7 @@
 }
 
 @layer components {
+  /* ------------------------------------------------------------ layout */
   .container-site {
     width: 100%;
     max-width: var(--container-max);
@@ -110,5 +125,313 @@
 
   .section {
     padding-block: var(--section-pad);
+  }
+
+  .eyebrow {
+    @apply font-mono text-mono tracking-[0.04em] text-muted;
+  }
+
+  .skip-link {
+    @apply fixed left-4 top-3 z-50 -translate-y-24 rounded bg-accent px-4 py-3 font-bold text-base;
+  }
+  .skip-link:focus-visible {
+    @apply translate-y-0;
+  }
+
+  /* Controls that only work with JavaScript are hidden without it. */
+  .no-js .js-only {
+    display: none !important;
+  }
+
+  /* ------------------------------------------------------------ mobile menu sheet */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--base);
+    color: var(--text);
+    overflow-y: auto;
+  }
+  .mobile-menu::backdrop {
+    background: var(--base);
+  }
+
+  /* ------------------------------------------------------------ headshot treatment (board 5) */
+  .headshot {
+    object-position: 50% 30%;
+    filter: grayscale(1) sepia(0.25) contrast(1.08) brightness(0.86);
+  }
+
+  /* ------------------------------------------------------------ 45 degree cut corner */
+  .cut-sm, .cut-md, .cut-lg, .cut-photo {
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+  .cut-sm { --cut: var(--cut-sm); }
+  .cut-md { --cut: var(--cut-md); }
+  .cut-lg { --cut: var(--cut-lg); }
+  .cut-photo { --cut: var(--cut-photo); }
+
+  /* ------------------------------------------------------------ buttons */
+  .btn {
+    @apply inline-flex items-center justify-center rounded px-6 font-text text-button transition-colors;
+    transition-property: background-color, border-color, color, box-shadow, transform;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-primary {
+    @apply bg-accent font-bold text-base shadow-btn hover:bg-accent-hi active:bg-accent-lo active:shadow-btn-pressed;
+  }
+  .btn-secondary {
+    @apply border border-border bg-raised font-medium text-text shadow-hl hover:border-text-2 hover:bg-raised-hover active:bg-surface;
+  }
+
+  /* ------------------------------------------------------------ text link */
+  .link {
+    @apply text-text-2 no-underline decoration-accent decoration-2 underline-offset-[6px] transition-colors hover:text-text hover:underline;
+  }
+  .link-accent {
+    @apply text-accent underline underline-offset-4 transition-colors hover:text-accent-hi;
+  }
+  .link-inline {
+    @apply text-text underline underline-offset-4 transition-colors hover:text-accent;
+  }
+
+  /* ------------------------------------------------------------ form fields */
+  .field {
+    @apply block w-full rounded border border-border bg-field px-[14px] font-text text-field text-text shadow-field transition-colors hover:border-muted focus:border-accent;
+  }
+
+  /* ------------------------------------------------------------ hero diagram
+   * Boxes and joins are positioned on one geometry; the narrow geometry is
+   * board 6 (350 wide), the wide one board 5 (540 wide). Joins carry
+   * .dg-join so the draw-in in step 4 can target them.
+   */
+  .diagram {
+    --h: 48px;          /* plate height */
+    --y0: 36px;         /* product / model row */
+    --y1: 108px;        /* first part row */
+    --step: 60px;       /* part row pitch */
+    --col: 54.3%;       /* left column width */
+    --spine: 59.4%;     /* vertical join */
+    --model-x: 64.6%;
+    --model-w: 25.7%;
+    --dim-x: 68.6%;
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    height: calc(var(--y1) + 3 * var(--step) + var(--h) + 8px);
+    margin: 0;
+    font-family: theme("fontFamily.mono");
+    font-size: clamp(11px, 3.4vw, 13px);
+    line-height: 1.2;
+  }
+  .diagram ul { list-style: none; margin: 0; padding: 0; }
+  .dg-plate {
+    position: absolute;
+    left: 0;
+    width: var(--col);
+    height: var(--h);
+    display: flex;
+    align-items: center;
+    padding-inline: clamp(6px, 2.4vw, 16px);
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  .dg-product {
+    top: var(--y0);
+    background: var(--raised);
+    color: var(--text);
+    box-shadow: var(--shadow-hl);
+  }
+  .dg-part {
+    top: calc(var(--y1) + var(--i) * var(--step));
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+  }
+  .dg-model {
+    position: absolute;
+    top: var(--y0);
+    left: var(--model-x);
+    width: var(--model-w);
+    height: var(--h);
+    box-sizing: border-box;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dg-ai-label {
+    position: absolute;
+    top: 0;
+    left: calc(var(--model-x) + var(--model-w) / 2);
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: var(--accent);
+    font-size: 0.92em;
+  }
+  .dg-join {
+    position: absolute;
+    background: var(--border);
+  }
+  .dg-join-ai {
+    left: calc(var(--model-x) + var(--model-w) / 2);
+    top: calc(var(--y0) - 18px);
+    width: 1px;
+    height: 18px;
+    background: var(--accent);
+  }
+  .dg-join-model {
+    left: var(--col);
+    top: calc(var(--y0) + var(--h) / 2);
+    width: calc(var(--model-x) - var(--col));
+    height: 1px;
+  }
+  .dg-join-spine {
+    left: var(--spine);
+    top: calc(var(--y0) + var(--h) / 2);
+    width: 1px;
+    height: calc(var(--y1) + 3 * var(--step) - var(--y0));
+  }
+  .dg-join-part {
+    left: var(--col);
+    top: calc(var(--y1) + var(--i) * var(--step) + var(--h) / 2);
+    width: calc(var(--spine) - var(--col));
+    height: 1px;
+  }
+  .dg-dim {
+    position: absolute;
+    left: var(--dim-x);
+    top: var(--y1);
+    width: 1px;
+    height: calc(3 * var(--step) + var(--h));
+    background: var(--muted);
+  }
+  .dg-dim::before,
+  .dg-dim::after {
+    content: "";
+    position: absolute;
+    left: -7px;
+    width: 15px;
+    height: 1px;
+    background: var(--muted);
+  }
+  .dg-dim::before { top: 0; }
+  .dg-dim::after { bottom: 0; }
+  .dg-caption {
+    position: absolute;
+    top: var(--y1);
+    left: calc(var(--dim-x) + 14px);
+    right: 0;
+    height: calc(3 * var(--step) + var(--h));
+    display: flex;
+    align-items: center;
+    color: var(--text-2);
+    font-size: 0.92em;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 480px) {
+    .diagram {
+      --h: 52px;
+      --y0: 42px;
+      --y1: 130px;
+      --step: 70px;
+      --col: 48%;
+      --spine: 54%;
+      --model-x: 61%;
+      --model-w: 23%;
+      --dim-x: 90%;
+      max-width: 540px;
+      font-size: 14px;
+    }
+    .dg-join-ai {
+      top: 22px;
+      height: 20px;
+    }
+    .dg-caption {
+      left: calc(var(--dim-x) + 10px);
+      width: 28px;
+      writing-mode: vertical-rl;
+      justify-content: center;
+    }
+  }
+
+  /* ------------------------------------------------------------ work rows */
+  .work-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "idx name"
+      "desc desc"
+      "link link";
+    column-gap: 12px;
+    row-gap: 8px;
+    align-items: baseline;
+  }
+  .work-row > .work-body { display: contents; }
+  .work-row .work-idx { grid-area: idx; }
+  .work-row .work-name { grid-area: name; }
+  .work-row .work-desc { grid-area: desc; }
+  .work-row .work-link { grid-area: link; justify-self: start; }
+
+  @media (min-width: 900px) {
+    .work-row {
+      grid-template-columns: 40px minmax(0, 1fr) 220px;
+      grid-template-areas:
+        "idx name link"
+        ". desc .";
+      column-gap: 32px;
+      row-gap: 4px;
+    }
+    /* Span both rows so the 44px tap target never pushes the description down. */
+    .work-row .work-link { grid-row: 1 / span 2; align-self: start; margin-top: -6px; }
+  }
+
+  /* ------------------------------------------------------------ process rail */
+  .rail-node {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 13px;
+    height: 13px;
+    box-sizing: border-box;
+    border: 1.5px solid var(--accent);
+    background: var(--sunk);
+  }
+  .rail-line {
+    position: absolute;
+    background: var(--border);
+  }
+  .rail-step {
+    position: relative;
+    padding: 0 0 36px 36px;
+  }
+  .rail-step:last-child { padding-bottom: 0; }
+  .rail-step .rail-line { left: 6px; top: 6px; bottom: 0; width: 1px; }
+  .rail-step:last-child .rail-line { display: none; }
+  .rail-end { display: none; }
+
+  @media (min-width: 1080px) {
+    .rail-step { padding: 30px 0 0; }
+    .rail-step .rail-line { left: 0; right: -40px; top: 6px; bottom: auto; width: auto; height: 1px; }
+    .rail-step:last-child .rail-line { display: block; right: 0; }
+    .rail-step:last-child .rail-end {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 1px;
+      height: 13px;
+      background: var(--border);
+    }
   }
 }
