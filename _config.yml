@@ -3,8 +3,8 @@ url: "https://aissac.ro"
 baseurl: ""
 lang: en
 
-# Public integration settings (not secrets). Filled in at step 5 and 6.
-contact_endpoint: ""        # Cloudflare Worker URL, e.g. https://contact.aissac.ro/contact
+# Public integration settings (not secrets).
+contact_endpoint: "https://aissac-contact.aissac-ro.workers.dev/contact" # Cloudflare Worker (worker/)
 turnstile_site_key: "0x4AAAAAAFww-hULDFY11sCy" # public Turnstile site key
 turnstile_action: "contact"  # must match TURNSTILE_ACTION in worker/wrangler.toml
 cf_analytics_token: ""      # Cloudflare Web Analytics beacon token
