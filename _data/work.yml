@@ -1,0 +1,41 @@
+# 02 / Work. Seven rows, in order, no role labels.
+# `url` is the link target; `link` is the visible text. Omit both for no link.
+- index: "01"
+  name: Blinksale
+  description: Invoicing software for small businesses in the US. Creating, sending and tracking invoices, built and run as a subscription SaaS product.
+  url: https://blinksale.com
+  link: blinksale.com
+
+- index: "02"
+  name: ZenCash
+  description: "A receivables CRM that took the chasing out of unpaid invoices: automated follow-ups, so businesses got paid on time without doing it by hand."
+
+- index: "03"
+  name: Sleekbill
+  description: Billing and invoicing for the Indian market, built around GST compliance so small businesses could invoice correctly under the tax rules.
+  url: https://sleekbill.in
+  link: sleekbill.in
+
+- index: "04"
+  name: notonthehighstreet.com
+  description: One of the UK's best-known online marketplaces for independent sellers, running at high traffic and at its busiest through the gifting season.
+  url: https://www.notonthehighstreet.com
+  link: notonthehighstreet.com
+
+- index: "05"
+  name: Builder.ai
+  description: A platform for building custom software with AI assistance, assembling applications from reusable features with engineers in the loop.
+  url: https://builder.ai
+  link: builder.ai
+
+- index: "06"
+  name: TacticalTrainer
+  description: "Our own product: a strength training app that plans periodized programs. Training concepts are written in a purpose-built DSL, so new programs are declared rather than coded."
+  url: https://tacticaltrainer.eu
+  link: tacticaltrainer.eu
+
+- index: "07"
+  name: TORY
+  description: A home inventory app for iOS, using on-device machine learning to make cataloguing what you own fast and private.
+  url: https://inventory.capital
+  link: inventory.capital

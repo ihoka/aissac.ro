@@ -3,6 +3,11 @@ url: "https://aissac.ro"
 baseurl: ""
 lang: en
 
+# Public integration settings (not secrets). Filled in at step 5 and 6.
+contact_endpoint: ""        # Cloudflare Worker URL, e.g. https://contact.aissac.ro/contact
+turnstile_site_key: ""      # public Turnstile site key
+cf_analytics_token: ""      # Cloudflare Web Analytics beacon token
+
 markdown: kramdown
 permalink: pretty
 

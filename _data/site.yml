@@ -1,0 +1,167 @@
+# All site copy except the services and work lists.
+# Source: docs/build-spec.md section 4 and the Craft boards 5 to 8.
+# Templates read from here only; no copy lives in _includes or _layouts.
+
+meta:
+  title: "aissac: software products that survive production"
+  description: A studio in Cluj-Napoca building web and mobile products, platforms and the AI features inside them.
+
+wordmark: aissac
+home_label: aissac, back to top
+skip_link: Skip to content # not on the boards; accessibility requirement
+
+email: office@aissac.ro
+location: Cluj-Napoca, Romania
+timezone: EET, UTC+2 (UTC+3 in summer)
+
+# ---------------------------------------------------------------- nav
+nav:
+  label: Primary
+  mobile_label: Mobile
+  footer_label: Footer
+  menu_button: Menu
+  close_button: Close
+  # `index` is the mono number shown on the right of each mobile menu row.
+  links:
+    - label: Services
+      href: "#services"
+      index: "01"
+    - label: Work
+      href: "#work"
+      index: "02"
+    - label: About
+      href: "#about"
+      index: "04"
+  cta:
+    label: Start a project
+    href: "#contact"
+
+# ---------------------------------------------------------------- hero
+hero:
+  title: We build software products that survive contact with production.
+  lede: Web and mobile products, platforms, and the AI features inside them, designed and engineered by a studio that has been shipping software for twenty years. We build the unglamorous parts that decide whether any of it works, the AI part included.
+  primary:
+    label: Start a project
+    href: "#contact"
+  secondary:
+    label: See what we have built
+    href: "#work"
+  diagram:
+    label: "Diagram: your product connects to a small model box. Guardrails, retrieval, tools and evals make up most of the system, labelled the unglamorous parts."
+    product: your product
+    ai_part: the AI part
+    model: model
+    parts:
+      - guardrails
+      - retrieval · pgvector
+      - tools · MCP
+      - evals · traces
+    caption: the unglamorous parts
+
+# ---------------------------------------------------------------- track record
+track_record:
+  label: Track record
+  text: Twenty years of shipping software, for US startups, for some of the UK's busiest online businesses, and with a team built here in Romania.
+  clients:
+    - Blinksale
+    - ZenCash
+    - Sleekbill
+    - notonthehighstreet.com
+    - Builder.ai
+
+# ---------------------------------------------------------------- sections
+services:
+  id: services
+  eyebrow: 01 / Services
+  title: What we do
+  tags_label: Technologies
+
+work:
+  id: work
+  eyebrow: 02 / Work
+  title: Things we have built
+  sub: A short list, deliberately. Each of these shipped and ran in production.
+
+process:
+  id: process
+  eyebrow: 03 / Process
+  title: How this goes
+  steps:
+    - label: STEP 1
+      title: A week to get specific.
+      body: "We start with a short paid discovery: the real constraints, the riskiest assumption, and what shipping actually means. You end up with a plan you could hand to anyone."
+    - label: STEP 2
+      title: Short cycles, working software.
+      body: Two-week cycles, something usable at the end of each one. You see progress in the product, not in a status report.
+    - label: STEP 3
+      title: We leave it maintainable.
+      body: Tests, documentation, deployment, handover. The goal is a team that does not need us and calls us anyway.
+
+about:
+  id: about
+  eyebrow: 04 / About
+  title: Who you are talking to
+  lead: aissac is a small studio, and small is the point. The person who takes your first call is the person who writes the code. No account manager, no handoff to a junior team, no layer between you and the work.
+  founder:
+    paragraphs:
+      - "I have been building software for twenty years: first for US startups, with an engineering team I put together here in Romania, then for eight years in the UK, for companies like notonthehighstreet.com and Builder.ai. I came back to Cluj and now I build software products for people who need the thing to actually work."
+      - If you are weighing a studio against hiring, I am happy to tell you which one you need, even when it is not me.
+    signature: Istvan
+    link:
+      label: CV and background at ihoka.me
+      url: https://ihoka.me
+    headshot:
+      src: /assets/img/istvan.jpg # to be supplied
+      alt: Istvan
+      width: 240
+      height: 300
+
+contact:
+  id: contact
+  eyebrow: 05 / Contact
+  title: Start a project
+  sub: Tell us roughly what you have in mind. A paragraph is plenty. We reply within one working day.
+  optional: (optional)
+  fields:
+    name: Name
+    email: Email
+    company: Company
+    topic: What is this about
+    message: Message
+  topic_placeholder: Choose one # options are the service titles from services.yml
+  submit: Send
+  sending: Sending
+  retry: Try again
+  errors:
+    name: Enter your name so we know who to reply to. # PROPOSED, not in spec or boards: confirm
+    email: Enter a full email address, like name@company.com.
+    message: Write a sentence or two so we know where to start.
+  network_error:
+    title: Your message did not send.
+    body: "Nothing is lost, it is all still in the form. Try again, or email directly:"
+  aside:
+    label: Other ways to reach us
+    email_label: Email
+    based_in_label: Based in
+    next_heading: WHAT HAPPENS NEXT
+    next_body: Within one working day you hear back from the person who would write the code, with a few questions and a time to talk.
+
+# ---------------------------------------------------------------- footer
+footer:
+  company: Aissac SRL
+  copyright: © 2026 aissac
+
+# ---------------------------------------------------------------- other pages
+back_to_start: Back to the start
+
+thanks:
+  title: Message received.
+  body: "We read everything that comes in and reply within one working day, usually sooner. If it is urgent, email directly:"
+
+not_found:
+  title: This page does not exist.
+  body: Which is embarrassing, given what we do for a living.
+  diagram:
+    request: request
+    missing: this page
+    gap: gap

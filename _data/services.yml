@@ -1,0 +1,21 @@
+# 01 / Services. Four cards, in order. Titles also populate the
+# "What is this about" select in the contact form.
+- label: PART 01
+  title: Products, zero to one
+  body: You have a concept and a deadline. We take it from idea to a product people can use, and we stay long enough to make it stable.
+  tags: [product design, Next.js, Rails, evals]
+
+- label: PART 02
+  title: Embedded senior engineering
+  body: Sometimes you do not need an agency. You need one very experienced engineer inside your team for a quarter.
+  tags: [Rails, TypeScript, iOS, platform]
+
+- label: PART 03
+  title: AI inside your existing product
+  body: You already have software and customers. We add the assistant, the search or the automation without destabilising what works.
+  tags: [integration, pgvector, migrations]
+
+- label: PART 04
+  title: Agents and automation
+  body: "Agents that do real work inside real systems: tool use, retrieval, orchestration, guardrails, and the observability to know when they are wrong."
+  tags: [MCP, RAG, orchestration, evals]
