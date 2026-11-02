@@ -1,0 +1,14 @@
+{%- assign hero = site.data.site.hero -%}
+<section aria-labelledby="hero-title" class="container-site flex flex-col gap-12 pb-[72px] pt-12 hero:flex-row hero:items-center hero:pb-28 hero:pt-24">
+  <div class="flex min-w-0 flex-col gap-6 hero:flex-[1_1_560px] hero:gap-7">
+    <h1 id="hero-title" class="m-0 font-display text-hero font-extrabold [text-wrap:balance]">{{ hero.title }}</h1>
+    <p class="m-0 max-w-[640px] text-lede text-text-2 [text-wrap:pretty]">{{ hero.lede }}</p>
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <a class="btn btn-primary h-btn" href="{{ hero.primary.href }}">{{ hero.primary.label }}</a>
+      <a class="btn btn-secondary h-btn" href="{{ hero.secondary.href }}">{{ hero.secondary.label }}</a>
+    </div>
+  </div>
+  <div class="mt-4 hero:mt-0 hero:flex-[1_1_440px] hero:max-w-[540px]">
+    {% include hero-diagram.html %}
+  </div>
+</section>

@@ -1,0 +1,18 @@
+{%- assign sec = site.data.site.process -%}
+<section aria-labelledby="{{ sec.id }}-title" class="border-y border-rule bg-sunk">
+  <div class="container-site section">
+    <div class="mb-8 lg:mb-14">{% include section-head.html section=sec %}</div>
+    <ol class="rail m-0 grid list-none gap-0 p-0 hero:grid-cols-3 hero:gap-10" role="list">
+      {%- for step in sec.steps %}
+      <li class="rail-step flex min-w-0 flex-col gap-[10px] hero:gap-4" style="--n: {{ forloop.index0 }}">
+        <span aria-hidden="true" class="rail-line"></span>
+        <span aria-hidden="true" class="rail-end"></span>
+        <span aria-hidden="true" class="rail-node"></span>
+        <p class="m-0 font-mono text-mono leading-[13px] text-accent">{{ step.label }}</p>
+        <h3 class="m-0 font-display text-h3 font-bold">{{ step.title }}</h3>
+        <p class="m-0 text-body text-text-2">{{ step.body }}</p>
+      </li>
+      {%- endfor %}
+    </ol>
+  </div>
+</section>

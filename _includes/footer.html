@@ -1,0 +1,26 @@
+{%- assign s = site.data.site -%}
+<footer class="border-t border-rule">
+  <div class="container-site flex flex-col gap-8 pb-8 pt-12 md:gap-12 md:pb-10 md:pt-16">
+    <div class="flex flex-col gap-8 md:flex-row md:flex-wrap md:justify-between md:gap-10">
+      {% include wordmark.html size="text-mark-footer" %}
+      <div class="grid grid-cols-2 gap-x-4 md:flex md:flex-wrap md:gap-x-[72px] md:gap-y-8">
+        <nav aria-label="{{ s.nav.footer_label }}">
+          <ul class="m-0 flex list-none flex-col p-0 md:gap-1" role="list">
+            {%- for link in s.nav.links %}
+            <li><a class="link inline-flex min-h-tap items-center text-ui" href="{{ '/' | relative_url }}{{ link.href }}">{{ link.label }}</a></li>
+            {%- endfor %}
+            <li><a class="link inline-flex min-h-tap items-center text-ui" href="{{ '/' | relative_url }}{{ s.nav.cta.href }}">{{ s.nav.cta.label }}</a></li>
+          </ul>
+        </nav>
+        <div class="flex flex-col md:gap-1">
+          <a class="link inline-flex min-h-tap items-center text-ui" href="mailto:{{ s.email }}">{{ s.email }}</a>
+          <span class="inline-flex min-h-tap items-center text-ui text-text-2">{{ s.location }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-[10px] border-t border-rule pt-4 font-mono text-mono text-muted md:flex-row md:flex-wrap md:justify-between md:gap-x-8 md:gap-y-3 md:pt-5">
+      <span class="text-text-2">{{ s.footer.company }}</span>
+      <span>{{ s.footer.copyright }}</span>
+    </div>
+  </div>
+</footer>

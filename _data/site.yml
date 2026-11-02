@@ -10,6 +10,11 @@ wordmark: aissac
 home_label: aissac, back to top
 skip_link: Skip to content # not on the boards; accessibility requirement
 
+# Decorative glyphs (aria-hidden where they appear)
+glyphs:
+  external: "↗"
+  separator: "·"
+
 email: office@aissac.ro
 location: Cluj-Napoca, Romania
 timezone: EET, UTC+2 (UTC+3 in summer)
@@ -111,7 +116,8 @@ about:
       label: CV and background at ihoka.me
       url: https://ihoka.me
     headshot:
-      src: /assets/img/istvan.jpg # to be supplied
+      src: /assets/img/istvan.jpg # stand-in from the design canvas; final photo to be supplied
+      webp: /assets/img/istvan.webp
       alt: Istvan
       width: 240
       height: 300

@@ -1,0 +1,8 @@
+{%- comment -%}
+  One labelled input. Params: name, type, label, autocomplete, required.
+  Optional fields get the "(optional)" qualifier from data.
+{%- endcomment -%}
+<div class="flex min-w-0 flex-col gap-2 sm:flex-[1_1_240px]">
+  <label for="f-{{ include.name }}" class="text-label font-medium text-text">{{ include.label }}{% unless include.required %} <span class="font-normal text-muted">{{ site.data.site.contact.optional }}</span>{% endunless %}</label>
+  <input id="f-{{ include.name }}" name="{{ include.name }}" type="{{ include.type }}" autocomplete="{{ include.autocomplete }}"{% if include.required %} required{% endif %} class="field h-field">
+</div>

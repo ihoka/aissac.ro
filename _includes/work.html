@@ -1,0 +1,21 @@
+{%- assign sec = site.data.site.work -%}
+<section id="{{ sec.id }}" aria-labelledby="{{ sec.id }}-title" class="container-site pb-[var(--section-pad)]">
+  <div class="mb-6 flex flex-col gap-4 lg:mb-10 lg:flex-row lg:flex-wrap lg:items-end lg:justify-between lg:gap-x-12">
+    {% include section-head.html section=sec %}
+    <p class="m-0 max-w-[440px] text-intro text-text-2">{{ sec.sub }}</p>
+  </div>
+  <ol class="m-0 list-none border-b border-rule p-0" role="list">
+    {%- for item in site.data.work %}
+    <li class="work-row group border-t border-rule py-[22px] transition-colors hover:bg-surface work:px-4 work:py-7">
+      <span class="work-idx font-mono text-mono text-muted">{{ item.index }}</span>
+      <div class="work-body">
+        <h3 class="work-name m-0 font-display text-work-name font-bold transition-colors group-hover:text-accent">{{ item.name }}</h3>
+        <p class="work-desc m-0 max-w-[68ch] text-body-sm text-text-2">{{ item.description }}</p>
+      </div>
+      {%- if item.url %}
+      <a class="work-link link-accent inline-flex min-h-tap items-center gap-1.5 text-label" href="{{ item.url }}">{{ item.link }} <span aria-hidden="true">{{ site.data.site.glyphs.external }}</span></a>
+      {%- endif %}
+    </li>
+    {%- endfor %}
+  </ol>
+</section>

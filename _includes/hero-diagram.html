@@ -1,0 +1,32 @@
+{%- comment -%}
+  The signature device. HTML boxes and real text, never an image.
+  Screen readers get the figure's label, then two lists: the product and the
+  AI part, then the unglamorous parts. Joins are decorative and hidden.
+{%- endcomment -%}
+{%- assign d = site.data.site.hero.diagram -%}
+<figure class="diagram" aria-label="{{ d.label }}">
+  <ul>
+    <li class="dg-plate dg-product cut-sm">{{ d.product }}</li>
+    <li>
+      <span class="dg-ai-label">{{ d.ai_part }}</span>
+      <span class="dg-model">{{ d.model }}</span>
+    </li>
+  </ul>
+
+  <ul aria-labelledby="dg-caption">
+    {%- for part in d.parts %}
+    <li class="dg-plate dg-part" style="--i: {{ forloop.index0 }}">{{ part }}</li>
+    {%- endfor %}
+  </ul>
+  <p class="dg-caption m-0" id="dg-caption">{{ d.caption }}</p>
+
+  <div aria-hidden="true">
+    <span class="dg-join dg-join-ai" style="--n: 0"></span>
+    <span class="dg-join dg-join-model" style="--n: 1"></span>
+    <span class="dg-join dg-join-spine" style="--n: 2"></span>
+    {%- for part in d.parts %}
+    <span class="dg-join dg-join-part" style="--i: {{ forloop.index0 }}; --n: {{ forloop.index | plus: 2 }}"></span>
+    {%- endfor %}
+    <span class="dg-join dg-dim" style="--n: 7"></span>
+  </div>
+</figure>

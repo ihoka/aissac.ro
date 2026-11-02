@@ -1,0 +1,28 @@
+{%- assign sec = site.data.site.about -%}
+{%- assign f = sec.founder -%}
+<section id="{{ sec.id }}" aria-labelledby="{{ sec.id }}-title" class="container-site section">
+  <div class="mb-4 lg:mb-10">{% include section-head.html section=sec %}</div>
+  <p class="m-0 mb-6 max-w-[900px] text-lead text-text [text-wrap:pretty] lg:mb-16">{{ sec.lead }}</p>
+
+  <div class="flex flex-col gap-4 md:flex-row md:flex-wrap md:items-start md:gap-8">
+    <picture class="block shrink-0">
+      <source srcset="{{ f.headshot.webp | relative_url }}" type="image/webp">
+      <img src="{{ f.headshot.src | relative_url }}" alt="{{ f.headshot.alt }}"
+           width="{{ f.headshot.width }}" height="{{ f.headshot.height }}" loading="lazy" decoding="async"
+           class="headshot cut-photo h-[160px] w-[128px] object-cover md:h-[300px] md:w-[240px]">
+    </picture>
+
+    <figure class="cut-lg m-0 flex flex-col gap-4 bg-raised px-6 py-8 shadow-hl md:max-w-[800px] md:flex-[1_1_560px] md:gap-5 md:px-14 md:py-12">
+      <blockquote class="m-0 flex flex-col gap-4 text-quote text-text md:gap-[18px]">
+        {%- for para in f.paragraphs %}
+        <p class="m-0">{{ para }}</p>
+        {%- endfor %}
+      </blockquote>
+      <figcaption class="flex flex-wrap items-center gap-x-4 gap-y-2 md:mt-2">
+        <span aria-hidden="true" class="h-px w-8 bg-accent md:w-10"></span>
+        <span class="font-display text-signature font-bold text-text">{{ f.signature }}</span>
+        <a class="link-accent inline-flex min-h-tap basis-full items-center gap-1.5 text-label sm:ml-auto sm:basis-auto md:text-ui" href="{{ f.link.url }}">{{ f.link.label }} <span aria-hidden="true">{{ site.data.site.glyphs.external }}</span></a>
+      </figcaption>
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+{%- assign sec = site.data.site.services -%}
+<section id="{{ sec.id }}" aria-labelledby="{{ sec.id }}-title" class="container-site section">
+  <div class="mb-8 lg:mb-12">{% include section-head.html section=sec %}</div>
+  <div class="grid gap-4 md:gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(520px,100%),1fr))]">
+    {%- for service in site.data.services %}
+    <article class="cut-md flex flex-col gap-3 bg-surface p-6 shadow-hl-sm md:min-h-[280px] md:gap-[14px] md:p-9">
+      <p class="m-0 font-mono text-mono text-accent">{{ service.label }}</p>
+      <h3 class="m-0 font-display text-h3 font-bold">{{ service.title }}</h3>
+      <p class="m-0 max-w-[52ch] text-body text-text-2">{{ service.body }}</p>
+      <ul aria-label="{{ sec.tags_label }}" class="m-0 mt-auto flex list-none flex-wrap gap-1.5 p-0 pt-0 md:gap-2 md:pt-2" role="list">
+        {%- for tag in service.tags %}
+        <li class="inline-flex h-7 items-center rounded bg-raised px-2 font-mono text-mono text-text-2 shadow-hl-sm md:px-[10px]">{{ tag }}</li>
+        {%- endfor %}
+      </ul>
+    </article>
+    {%- endfor %}
+  </div>
+</section>

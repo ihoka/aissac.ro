@@ -1,0 +1,36 @@
+{%- assign nav = site.data.site.nav -%}
+<header class="site-header sticky top-0 z-40 border-b border-rule bg-base/92 shadow-nav backdrop-blur-[8px]">
+  <nav aria-label="{{ nav.label }}" class="container-site flex h-nav items-center justify-between gap-6">
+    {% include wordmark.html size="text-mark-nav" %}
+
+    <ul class="hidden items-center gap-9 nav:flex" role="list">
+      {%- for link in nav.links %}
+      <li><a class="nav-link link py-3 text-ui" href="{{ '/' | relative_url }}{{ link.href }}">{{ link.label }}</a></li>
+      {%- endfor %}
+      <li><a class="btn btn-primary h-btn-nav px-[18px] text-button-sm" href="{{ '/' | relative_url }}{{ nav.cta.href }}">{{ nav.cta.label }}</a></li>
+    </ul>
+
+    <button type="button" class="menu-button js-only btn btn-secondary h-btn-nav gap-[10px] px-[14px] text-ui nav:hidden"
+            aria-expanded="false" aria-controls="mobile-menu">
+      <span aria-hidden="true" class="flex flex-col gap-1"><span class="block h-[1.5px] w-4 bg-text"></span><span class="block h-[1.5px] w-4 bg-text"></span></span>
+      {{ nav.menu_button }}
+    </button>
+  </nav>
+</header>
+
+<dialog id="mobile-menu" class="mobile-menu" aria-label="{{ nav.mobile_label }}">
+  <div class="flex h-nav items-center justify-between border-b border-rule px-5">
+    {% include wordmark.html size="text-mark-nav" %}
+    <button type="button" class="menu-close btn btn-secondary h-btn-nav gap-[10px] border-text-2 px-[14px] text-ui">
+      <span aria-hidden="true" class="relative block h-[14px] w-[14px]"><span class="absolute left-0 top-[6px] block h-[1.5px] w-[14px] rotate-45 bg-text"></span><span class="absolute left-0 top-[6px] block h-[1.5px] w-[14px] -rotate-45 bg-text"></span></span>
+      {{ nav.close_button }}
+    </button>
+  </div>
+  <nav aria-label="{{ nav.mobile_label }}" class="flex flex-col px-5 pt-2">
+    {%- for link in nav.links %}
+    <a class="menu-link flex min-h-menu-row items-center justify-between border-b border-rule font-display text-menu-link font-bold text-text no-underline hover:text-accent"
+       href="{{ '/' | relative_url }}{{ link.href }}">{{ link.label }}<span class="font-mono text-mono font-normal text-muted">{{ link.index }}</span></a>
+    {%- endfor %}
+    <a class="menu-link btn btn-primary mt-6 w-full" href="{{ '/' | relative_url }}{{ nav.cta.href }}">{{ nav.cta.label }}</a>
+  </nav>
+</dialog>

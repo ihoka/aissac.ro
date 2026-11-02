@@ -1,0 +1,2 @@
+{%- comment -%} The stencil wordmark as a link home. Param: size (Tailwind font-size class). {%- endcomment -%}
+<a href="{{ '/#top' | relative_url }}" aria-label="{{ site.data.site.home_label }}" class="font-mark font-extrabold {{ include.size }} text-text no-underline">{{ site.data.site.wordmark }}</a>
