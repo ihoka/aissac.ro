@@ -1,8 +1,13 @@
 {%- comment -%}
-  One labelled input. Params: name, type, label, autocomplete, required.
-  Optional fields get the "(optional)" qualifier from data.
+  One labelled input with its error slot.
+  Params: name, type, label, autocomplete, required, error (message text).
+  The error is hidden until JS (or the server) flags the field; aria-describedby
+  is only set while it shows, so a hidden error is never announced.
 {%- endcomment -%}
 <div class="flex min-w-0 flex-col gap-2 sm:flex-[1_1_240px]">
   <label for="f-{{ include.name }}" class="text-label font-medium text-text">{{ include.label }}{% unless include.required %} <span class="font-normal text-muted">{{ site.data.site.contact.optional }}</span>{% endunless %}</label>
-  <input id="f-{{ include.name }}" name="{{ include.name }}" type="{{ include.type }}" autocomplete="{{ include.autocomplete }}"{% if include.required %} required{% endif %} class="field h-field">
+  <input id="f-{{ include.name }}" name="{{ include.name }}" type="{{ include.type }}" autocomplete="{{ include.autocomplete }}"{% if include.required %} required{% endif %}{% if include.type == "email" %} spellcheck="false"{% endif %} class="field h-field">
+  {%- if include.error %}
+  {% include field-error.html for=include.name message=include.error %}
+  {%- endif %}
 </div>

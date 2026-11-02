@@ -9,10 +9,11 @@
 
     <div class="flex flex-col gap-8 lg:flex-row lg:flex-wrap lg:items-start lg:gap-x-20 lg:gap-y-12">
       <form class="contact-form flex flex-col gap-[18px] lg:max-w-[760px] lg:flex-[1_1_560px] lg:gap-5"
-            method="post"{% if site.contact_endpoint != "" %} action="{{ site.contact_endpoint }}"{% endif %}>
+            method="post"{% if site.contact_endpoint != "" %} action="{{ site.contact_endpoint }}"{% endif %}
+            data-thanks="{{ '/thanks/' | relative_url }}">
         <div class="flex flex-col gap-[18px] sm:flex-row sm:flex-wrap sm:gap-5">
-          {%- include field.html name="name" type="text" label=sec.fields.name autocomplete="name" required=true %}
-          {%- include field.html name="email" type="email" label=sec.fields.email autocomplete="email" required=true %}
+          {%- include field.html name="name" type="text" label=sec.fields.name autocomplete="name" required=true error=sec.errors.name %}
+          {%- include field.html name="email" type="email" label=sec.fields.email autocomplete="email" required=true error=sec.errors.email %}
         </div>
         <div class="flex flex-col gap-[18px] sm:flex-row sm:flex-wrap sm:gap-5">
           {%- include field.html name="company" type="text" label=sec.fields.company autocomplete="organization" %}
@@ -28,15 +29,37 @@
         </div>
         <div class="flex flex-col gap-2">
           <label for="f-message" class="text-label font-medium text-text">{{ sec.fields.message }}</label>
-          <textarea id="f-message" name="message" rows="6" required class="field min-h-[160px] resize-y py-[14px] lg:min-h-[168px]"></textarea>
+          <textarea id="f-message" name="message" rows="6" required maxlength="5000" class="field min-h-[160px] resize-y py-[14px] lg:min-h-[168px]"></textarea>
+          {% include field-error.html for="message" message=sec.errors.message %}
         </div>
 
-        <div class="turnstile-slot min-h-[65px] max-w-full"></div>
+        {%- comment -%} Spam traps: a field people never see, and the render time (set by JS). {%- endcomment %}
+        <div class="honeypot" aria-hidden="true">
+          <label for="f-website">{{ sec.honeypot_label }}</label>
+          <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <input type="hidden" name="ts" value="">
+
+        <div class="turnstile-slot js-only min-h-[65px] max-w-full" data-sitekey="{{ site.turnstile_site_key }}"></div>
 
         <div>
-          <button type="submit" class="btn btn-primary h-btn w-full px-7 sm:w-auto sm:min-w-[160px]">{{ sec.submit }}</button>
+          <div class="form-alert-region" role="alert">
+            <div class="form-alert mb-4" hidden>
+              <span class="alert-icon" aria-hidden="true">{{ site.data.site.glyphs.alert }}</span>
+              <div class="flex flex-col gap-1.5">
+                <strong class="text-ui text-text">{{ sec.network_error.title }}</strong>
+                <span class="text-label leading-[1.5] text-text-2">{{ sec.network_error.body }} <a class="link-inline" href="mailto:{{ s.email }}">{{ s.email }}</a></span>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="submit-button btn btn-primary h-btn w-full gap-[10px] px-7 sm:w-auto sm:min-w-[160px]"
+                  data-label-send="{{ sec.submit }}" data-label-sending="{{ sec.sending }}" data-label-retry="{{ sec.retry }}">
+            <span class="spinner" aria-hidden="true" hidden></span>
+            <span class="submit-label">{{ sec.submit }}</span>
+          </button>
         </div>
       </form>
+      <script src="{{ '/assets/js/contact.js' | relative_url }}" defer></script>
 
       <aside aria-label="{{ sec.aside.label }}" class="flex flex-col gap-5 border-t border-rule pt-6 lg:max-w-[420px] lg:flex-[1_1_300px] lg:gap-7 lg:border-t-0 lg:pt-0">
         <dl class="m-0 grid grid-cols-[84px_minmax(0,1fr)] gap-[14px] text-ui lg:grid-cols-[96px_minmax(0,1fr)] lg:gap-4">

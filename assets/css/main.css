@@ -241,6 +241,105 @@
     @apply block w-full rounded border border-border bg-field px-[14px] font-text text-field text-text shadow-field transition-colors hover:border-muted focus:border-accent;
   }
 
+  /* ------------------------------------------------------------ form states (board 7) */
+  /* Error: 2px border, plus icon and text below. Never colour alone. */
+  .field[aria-invalid="true"] {
+    border-width: 2px;
+    border-color: var(--error);
+    padding-inline: 13px;
+  }
+  .field-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--error);
+  }
+  .field-error[hidden] { display: none; }
+  .alert-icon {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    background: var(--error);
+    color: var(--base);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .alert-icon-sm {
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    font-size: 11px;
+  }
+
+  /* Submitting: fields read-only (not disabled), quieter. */
+  .contact-form[data-state="submitting"] .field {
+    background: var(--sunk);
+    border-color: var(--rule);
+    color: var(--text-2);
+    box-shadow: none;
+  }
+  .contact-form[data-state="submitting"] select.field {
+    pointer-events: none;
+  }
+  .contact-form[data-state="submitting"] .turnstile-slot {
+    display: none;
+  }
+
+  /* Network error panel, directly above the button. */
+  .form-alert {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--error);
+    border-radius: var(--radius);
+    background: var(--raised);
+  }
+  .form-alert[hidden] { display: none; }
+
+  /* Sending state of the primary button: no disabled look, a busy one. */
+  .submit-button[aria-busy="true"],
+  .submit-button[aria-busy="true"]:hover,
+  .submit-button[aria-busy="true"]:active {
+    background: var(--raised);
+    border: 1px solid var(--border);
+    color: var(--text);
+    box-shadow: none;
+    transform: none;
+    cursor: progress;
+  }
+  .spinner {
+    width: 14px;
+    height: 14px;
+    box-sizing: border-box;
+    border: 2px solid var(--rule);
+    border-top-color: var(--accent);
+    border-radius: 9999px;
+    animation: spin 900ms linear infinite;
+  }
+  .spinner[hidden] { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .spinner { animation: none; }
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Honeypot: off-screen, out of the tab order, hidden from assistive tech. */
+  .honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
   /* ------------------------------------------------------------ hero diagram
    * Boxes and joins are positioned on one geometry; the narrow geometry is
    * board 6 (350 wide), the wide one board 5 (540 wide). Joins carry

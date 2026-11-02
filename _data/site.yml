@@ -14,6 +14,7 @@ skip_link: Skip to content # not on the boards; accessibility requirement
 glyphs:
   external: "↗"
   separator: "·"
+  alert: "!"
 
 email: office@aissac.ro
 location: Cluj-Napoca, Romania
@@ -142,6 +143,7 @@ contact:
     name: Enter your name so we know who to reply to. # PROPOSED, not in spec or boards: confirm
     email: Enter a full email address, like name@company.com.
     message: Write a sentence or two so we know where to start.
+  honeypot_label: Leave this field empty # never shown; spam trap for bots
   network_error:
     title: Your message did not send.
     body: "Nothing is lost, it is all still in the form. Try again, or email directly:"
