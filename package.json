@@ -1,0 +1,14 @@
+{
+  "name": "aissac.ro",
+  "private": true,
+  "description": "aissac studio website",
+  "scripts": {
+    "build:css": "tailwindcss -i assets/css/main.css -o assets/css/site.css --minify",
+    "watch:css": "tailwindcss -i assets/css/main.css -o assets/css/site.css --watch",
+    "build": "npm run build:css && bundle exec jekyll build",
+    "serve": "npm run build:css && bundle exec jekyll serve --livereload"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.19"
+  }
+}

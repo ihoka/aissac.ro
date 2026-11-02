@@ -1,0 +1,114 @@
+/*
+ * Tailwind entry and the design token file.
+ * This is the ONLY file in the repo allowed to contain colour literals.
+ * Source: docs/build-spec.md, section 2.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Colour */
+    --base: #17130F;       /* 900  page ground */
+    --surface: #211B16;    /* 800  cards, raised sections */
+    --raised: #2C251E;     /* 700  secondary buttons, insets */
+    --raised-hover: #352D25; /* secondary button hover ground (section 3) */
+    --rule: #3D342A;       /* 600  hairlines, section dividers */
+    --border: #75685A;     /* 500  input borders, diagram joins */
+    --muted: #9C8F7E;      /* 400  captions, mono labels */
+    --text-2: #CFC4B4;     /* 300  body copy */
+    --text: #F2EBDF;       /* 100  headings, high-emphasis */
+    --accent: #6FD6AE;     /* verdigris: primary buttons, links, current state */
+    --accent-hi: #8BE3C1;  /* accent hover */
+    --accent-lo: #5CC29B;  /* accent pressed */
+    --field: #120F0C;      /* input ground */
+    --error: #FF8F7A;      /* error borders and error text */
+
+    /* Shadows */
+    --shadow-btn: inset 0 -3px 0 rgba(23, 19, 15, 0.28);
+    --shadow-btn-pressed: inset 0 2px 0 rgba(23, 19, 15, 0.28);
+    --shadow-field: inset 0 1px 2px rgba(0, 0, 0, 0.45);
+    --shadow-nav: 0 8px 24px rgba(0, 0, 0, 0.35);
+
+    /* Shape and motion */
+    --radius: 3px;
+    --cut: 12px; /* 45 degree cut corner size; confirm against the comp in step 3 */
+    --duration: 150ms;
+    --duration-draw: 600ms;
+    --stagger: 80ms;
+
+    /* Layout */
+    --container-max: 1440px;
+    --gutter: clamp(20px, 4.4vw, 64px);
+    --section-pad: 72px;
+    --nav-h: 64px;
+
+    color-scheme: dark;
+  }
+
+  @media (min-width: 720px) {
+    :root {
+      --nav-h: 80px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --section-pad: 112px;
+    }
+  }
+
+  html {
+    background-color: var(--base);
+    color: var(--text-2);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-base font-text text-body text-text-2 antialiased;
+  }
+
+  /* Focus: on every interactive element, never removed. */
+  :focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 3px;
+  }
+
+  [id] {
+    scroll-margin-top: 96px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* All motion off under reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-site {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .section {
+    padding-block: var(--section-pad);
+  }
+}
