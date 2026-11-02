@@ -1,0 +1,15 @@
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+node_modules/
+vendor/
+.bundle/
+
+# Built by the Tailwind CLI
+assets/css/site.css
+
+# Worker local state and secrets
+worker/node_modules/
+worker/.wrangler/
+worker/.dev.vars

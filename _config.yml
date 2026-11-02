@@ -1,0 +1,33 @@
+# Site configuration. Copy lives in _data/, not here.
+url: "https://aissac.ro"
+baseurl: ""
+lang: en
+
+markdown: kramdown
+permalink: pretty
+
+plugins:
+  - jekyll-feed
+
+# Blog plumbing stays in place but publishes nothing at launch.
+feed:
+  path: feed.xml
+
+# The Tailwind entry file is compiled by the Tailwind CLI to assets/css/site.css
+# before Jekyll runs; Jekyll copies only the compiled output.
+exclude:
+  - assets/css/main.css
+  - tailwind.config.js
+  - package.json
+  - package-lock.json
+  - node_modules
+  - worker
+  - docs
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor
+  - .ruby-version
+
+keep_files:
+  - CNAME
