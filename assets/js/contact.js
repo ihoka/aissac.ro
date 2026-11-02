@@ -75,6 +75,7 @@
     window.onAissacTurnstile = () => {
       widgetId = window.turnstile.render(slot, {
         sitekey: siteKey,
+        action: slot.dataset.action,
         theme: "dark",
         size: "normal",
         callback: (token) => resolveToken(token),
