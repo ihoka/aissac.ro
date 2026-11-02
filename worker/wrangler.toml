@@ -11,6 +11,10 @@ SITE_URL = "https://aissac.ro"
 ALLOWED_ORIGINS = "https://aissac.ro,https://www.aissac.ro"
 MAIL_FROM = "aissac <office@aissac.ro>"
 MAIL_TO = "office@aissac.ro"
+# Turnstile: siteverify must return this action and one of these frontend
+# hostnames. Production only: never add localhost or 127.0.0.1 here.
+TURNSTILE_ACTION = "contact"
+TURNSTILE_HOSTNAMES = "aissac.ro,www.aissac.ro"
 
 # Per-IP rate limits. The binding supports 10 or 60 second windows.
 [[ratelimits]]

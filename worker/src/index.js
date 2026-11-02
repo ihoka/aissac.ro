@@ -59,7 +59,7 @@ export default {
 
     let verified = false;
     if (token) {
-      verified = await verifyTurnstile(token, ip, env.TURNSTILE_SECRET);
+      verified = await verifyTurnstile(token, ip, env);
       if (!verified) return reply.error(403, "turnstile");
     }
 
@@ -163,19 +163,41 @@ export function normalise(form) {
   return { values, errors };
 }
 
-async function verifyTurnstile(token, ip, secret) {
-  if (!secret) return false;
-  const body = new FormData();
-  body.set("secret", secret);
-  body.set("response", token);
+// Canonical siteverify (developers.cloudflare.com/turnstile/spin): require
+// success, the expected action and an approved frontend hostname.
+// Tokens are single-use; Cloudflare rejects a replayed one.
+export async function verifyTurnstile(token, ip, env) {
+  const hostnames = new Set(
+    (env.TURNSTILE_HOSTNAMES || "").split(",").map((h) => h.trim()).filter(Boolean)
+  );
+  if (!env.TURNSTILE_SECRET || typeof token !== "string" || token.length === 0 || token.length > 2048 || hostnames.size === 0) {
+    return false;
+  }
+  const body = new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token });
   if (ip !== "unknown") body.set("remoteip", ip);
+
+  let result;
   try {
-    const res = await fetch(SITEVERIFY, { method: "POST", body });
-    const data = await res.json();
-    return data.success === true;
+    const res = await fetch(SITEVERIFY, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!res.ok) return false;
+    result = await res.json();
   } catch {
     return false;
   }
+
+  // Cloudflare's public test keys answer with hostname "example.com" and no
+  // action. Accept that only where ALLOW_TEST_KEYS is set (local .dev.vars).
+  const testKey = env.ALLOW_TEST_KEYS === "1" && result?.metadata?.result_with_testing_key === true;
+  return (
+    result?.success === true &&
+    hostnames.has(result.hostname) &&
+    (result.action === env.TURNSTILE_ACTION || testKey)
+  );
 }
 
 async function sendEmail(env, { to, reply_to, subject, text }) {

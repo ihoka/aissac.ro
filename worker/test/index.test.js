@@ -6,6 +6,8 @@ const ORIGIN = "https://aissac.ro";
 const realFetch = globalThis.fetch;
 let calls; // outbound fetches: { url, body }
 let turnstileOk; // what siteverify answers
+let verifyResult; // extra fields merged into the siteverify answer
+let verifyStatus; // HTTP status of siteverify
 let resendOk; // whether Resend accepts
 let limited; // which limiter refuses
 
@@ -22,6 +24,8 @@ const env = () => ({
   MAIL_FROM: "aissac <office@aissac.ro>",
   MAIL_TO: "office@aissac.ro",
   TURNSTILE_SECRET: "secret",
+  TURNSTILE_ACTION: "contact",
+  TURNSTILE_HOSTNAMES: "aissac.ro,www.aissac.ro",
   RESEND_API_KEY: "re_test",
   CONTACT_LIMIT: limiter("CONTACT_LIMIT"),
   UNVERIFIED_LIMIT: limiter("UNVERIFIED_LIMIT"),
@@ -30,12 +34,14 @@ const env = () => ({
 beforeEach(() => {
   calls = [];
   turnstileOk = true;
+  verifyResult = {};
+  verifyStatus = 200;
   resendOk = true;
   limited = null;
   globalThis.fetch = async (url, init) => {
     if (String(url).includes("siteverify")) {
-      calls.push({ url: "siteverify", body: Object.fromEntries(init.body) });
-      return Response.json({ success: turnstileOk });
+      calls.push({ url: "siteverify", body: Object.fromEntries(init.body), headers: init.headers });
+      return Response.json({ success: turnstileOk, hostname: "aissac.ro", action: "contact", ...verifyResult }, { status: verifyStatus });
     }
     if (String(url).includes("resend")) {
       calls.push({ url: "resend", body: JSON.parse(init.body) });
@@ -57,13 +63,13 @@ const valid = {
   ts: String(Date.now() - 60_000),
 };
 
-function post(fields, { json = true, origin = ORIGIN, path = "/contact", method = "POST" } = {}) {
+function post(fields, { json = true, origin = ORIGIN, path = "/contact", method = "POST", envOverrides = {} } = {}) {
   const body = new FormData();
   for (const [k, v] of Object.entries(fields)) body.set(k, v);
   const headers = { "CF-Connecting-IP": "203.0.113.7" };
   if (origin) headers.Origin = origin;
   if (json) headers.Accept = "application/json";
-  return worker.fetch(new Request(`https://aissac-contact.example.workers.dev${path}`, { method, body: method === "POST" ? body : undefined, headers }), env(), null);
+  return worker.fetch(new Request(`https://aissac-contact.example.workers.dev${path}`, { method, body: method === "POST" ? body : undefined, headers }), { ...env(), ...envOverrides }, null);
 }
 const emails = () => calls.filter((c) => c.url === "resend").map((c) => c.body);
 
@@ -131,6 +137,61 @@ test("no-JS post with an invalid token is rejected back to the form", async () =
   assert.equal(res.status, 303);
   assert.equal(res.headers.get("Location"), "https://aissac.ro/#contact");
   assert.equal(emails().length, 0);
+});
+
+// canonical siteverify rules (developers.cloudflare.com/turnstile/spin)
+test("siteverify is called form-encoded with a timeout", async () => {
+  await post({ ...valid, "cf-turnstile-response": "tok" });
+  const sv = calls.find((c) => c.url === "siteverify");
+  assert.equal(sv.headers["Content-Type"], "application/x-www-form-urlencoded");
+  assert.equal(sv.body.response, "tok");
+});
+
+test("wrong action is rejected", async () => {
+  verifyResult = { action: "signup" };
+  const res = await post({ ...valid, "cf-turnstile-response": "tok" });
+  assert.equal(res.status, 403);
+  assert.equal(emails().length, 0);
+});
+
+test("token solved on another hostname is rejected", async () => {
+  verifyResult = { hostname: "evil.example" };
+  const res = await post({ ...valid, "cf-turnstile-response": "tok" });
+  assert.equal(res.status, 403);
+  assert.equal(emails().length, 0);
+});
+
+test("replayed token (siteverify says timeout-or-duplicate) is rejected", async () => {
+  turnstileOk = false;
+  verifyResult = { "error-codes": ["timeout-or-duplicate"] };
+  const res = await post({ ...valid, "cf-turnstile-response": "used" });
+  assert.equal(res.status, 403);
+  assert.equal(emails().length, 0);
+});
+
+test("oversized token is rejected without calling siteverify", async () => {
+  const res = await post({ ...valid, "cf-turnstile-response": "x".repeat(2049) });
+  assert.equal(res.status, 403);
+  assert.ok(!calls.some((c) => c.url === "siteverify"));
+});
+
+test("siteverify HTTP error is a rejection", async () => {
+  verifyStatus = 500;
+  const res = await post({ ...valid, "cf-turnstile-response": "tok" });
+  assert.equal(res.status, 403);
+});
+
+test("no hostname allowlist configured: reject rather than accept anything", async () => {
+  const res = await post({ ...valid, "cf-turnstile-response": "tok" }, { envOverrides: { TURNSTILE_HOSTNAMES: "" } });
+  assert.equal(res.status, 403);
+  assert.ok(!calls.some((c) => c.url === "siteverify"));
+});
+
+test("test-key answers are refused unless ALLOW_TEST_KEYS is set", async () => {
+  verifyResult = { hostname: "example.com", action: undefined, metadata: { result_with_testing_key: true } };
+  const hosts = { TURNSTILE_HOSTNAMES: "example.com" };
+  assert.equal((await post({ ...valid, "cf-turnstile-response": "tok" }, { envOverrides: hosts })).status, 403);
+  assert.equal((await post({ ...valid, "cf-turnstile-response": "tok" }, { envOverrides: { ...hosts, ALLOW_TEST_KEYS: "1" } })).status, 200);
 });
 
 // ------------------------------------------------------------ happy paths
