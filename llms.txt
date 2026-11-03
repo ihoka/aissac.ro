@@ -1,0 +1,43 @@
+---
+layout: null
+sitemap: false
+---
+{%- assign s = site.data.site -%}
+# {{ s.wordmark }}
+
+> {{ s.meta.description }}
+
+{{ s.hero.title }} {{ s.hero.lede }}
+
+{{ s.track_record.text }}
+
+## {{ s.services.title }}
+{% for sv in site.data.services %}
+- **{{ sv.title }}**: {{ sv.body }} ({{ sv.tags | join: ", " }})
+{%- endfor %}
+
+## {{ s.work.title }}
+{% for w in site.data.work %}
+- {% if w.url %}[{{ w.name }}]({{ w.url }}){% else %}{{ w.name }}{% endif %}: {{ w.description }}
+{%- endfor %}
+
+## {{ s.process.title }}
+{% for st in s.process.steps %}
+- **{{ st.title }}** {{ st.body }}
+{%- endfor %}
+
+## {{ s.about.title }}
+
+{{ s.about.lead }}
+{% for p in s.about.founder.paragraphs %}
+{{ p }}
+{% endfor %}
+- [{{ s.about.founder.link.label }}]({{ s.about.founder.link.url }})
+
+## {{ s.contact.title }}
+
+{{ s.contact.sub }}
+
+- [{{ s.email }}](mailto:{{ s.email }})
+- {{ s.location }}
+- [{{ s.contact.title }}]({{ '/#contact' | absolute_url }})

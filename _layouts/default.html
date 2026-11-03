@@ -37,7 +37,11 @@
 
     <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
     <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
+    <link rel="alternate" type="text/markdown" href="{{ '/llms.txt' | relative_url }}">
     {%- feed_meta %}
+    {%- if page.url == "/" %}
+    {% include structured-data.html %}
+    {%- endif %}
     {%- if site.cf_analytics_token != "" %}
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{ site.cf_analytics_token }}"}'></script>
     {%- endif %}

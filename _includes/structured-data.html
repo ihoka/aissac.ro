@@ -1,0 +1,72 @@
+{%- comment -%}
+  JSON-LD for search and AI answer engines: who the studio is, where, who
+  runs it and what it offers. Built only from _data, so it never drifts
+  from the visible copy. Home page only.
+{%- endcomment -%}
+{%- assign s = site.data.site -%}
+{%- assign place = s.location | split: ", " -%}
+{%- assign f = s.about.founder -%}
+{%- assign home = '/' | absolute_url -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": {{ home | append: '#organization' | jsonify }},
+      "name": {{ s.wordmark | jsonify }},
+      "legalName": {{ s.footer.company | jsonify }},
+      "url": {{ home | jsonify }},
+      "logo": {{ '/assets/img/icon-512.png' | absolute_url | jsonify }},
+      "image": {{ s.meta.og_image.src | absolute_url | jsonify }},
+      "description": {{ s.meta.description | jsonify }},
+      "slogan": {{ s.hero.title | jsonify }},
+      "email": {{ s.email | jsonify }},
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": {{ place.first | jsonify }},
+        "addressCountry": {{ place.last | jsonify }}
+      },
+      "founder": { "@id": {{ home | append: '#founder' | jsonify }} },
+      "knowsAbout": [{% assign tags = "" | split: "" %}{% for sv in site.data.services %}{% assign tags = tags | concat: sv.tags %}{% endfor %}{% assign tags = tags | uniq %}{% for t in tags %}{{ t | jsonify }}{% unless forloop.last %}, {% endunless %}{% endfor %}],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": {{ s.services.title | jsonify }},
+        "itemListElement": [
+          {%- for sv in site.data.services %}
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": {{ sv.title | jsonify }},
+              "description": {{ sv.body | jsonify }},
+              "provider": { "@id": {{ home | append: '#organization' | jsonify }} }
+            }
+          }{% unless forloop.last %},{% endunless %}
+          {%- endfor %}
+        ]
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": {{ home | append: '#founder' | jsonify }},
+      "name": {{ f.signature | jsonify }},
+      "description": {{ f.paragraphs.first | jsonify }},
+      "image": {{ f.headshot.src | absolute_url | jsonify }},
+      "url": {{ f.link.url | jsonify }},
+      "sameAs": [{{ f.link.url | jsonify }}],
+      "worksFor": { "@id": {{ home | append: '#organization' | jsonify }} },
+      "homeLocation": { "@type": "Place", "name": {{ s.location | jsonify }} }
+    },
+    {
+      "@type": "WebSite",
+      "@id": {{ home | append: '#website' | jsonify }},
+      "url": {{ home | jsonify }},
+      "name": {{ s.wordmark | jsonify }},
+      "description": {{ s.meta.description | jsonify }},
+      "inLanguage": {{ site.lang | default: 'en' | jsonify }},
+      "publisher": { "@id": {{ home | append: '#organization' | jsonify }} }
+    }
+  ]
+}
+</script>
