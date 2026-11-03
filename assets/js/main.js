@@ -126,7 +126,7 @@
   // ---------------------------------------------------------------- draw-in
   // Joins and the rail are drawn by default. Only here, with JS running and
   // motion allowed, are they reset and drawn in once on first view.
-  const drawables = document.querySelectorAll(".diagram, .rail");
+  const drawables = document.querySelectorAll(".diagram, .rail, .gap-diagram");
   if (!reducedMotion.matches && "IntersectionObserver" in window) {
     const io = new IntersectionObserver(
       (entries) => {

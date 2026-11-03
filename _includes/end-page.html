@@ -1,0 +1,24 @@
+{%- comment -%}
+  Body of the /thanks and /404 pages (boards F and Chrome States).
+  Params: title, body, email (bool, append the address link), diagram (bool, draw the 404 gap).
+{%- endcomment -%}
+{%- assign s = site.data.site -%}
+<section aria-labelledby="page-title" class="container-site flex min-h-[60vh] flex-col justify-center py-16 md:py-24">
+  <div class="flex max-w-[640px] flex-col gap-4">
+    {%- if include.diagram %}
+    {%- assign d = s.not_found.diagram %}
+    <div class="gap-diagram mb-2" aria-hidden="true">
+      <span class="gd-plate gd-request">{{ d.request }}</span>
+      <span class="gd-join gd-join-out" style="--n: 0"></span>
+      <span class="gd-tick gd-tick-out" style="--n: 1"></span>
+      <span class="gd-tick gd-tick-in" style="--n: 2"></span>
+      <span class="gd-join gd-join-in" style="--n: 2"></span>
+      <span class="gd-plate gd-missing">{{ d.missing }}</span>
+      <span class="gd-label">{{ d.gap }}</span>
+    </div>
+    {%- endif %}
+    <h1 id="page-title" class="m-0 font-display text-h2 font-extrabold">{{ include.title }}</h1>
+    <p class="m-0 text-body text-text-2">{{ include.body }}{% if include.email %} <a class="link-inline" href="mailto:{{ s.email }}">{{ s.email }}</a>{% endif %}</p>
+    <p class="m-0"><a class="link-accent inline-flex min-h-tap items-center text-ui font-medium" href="{{ '/' | relative_url }}">{{ s.back_to_start }}</a></p>
+  </div>
+</section>
