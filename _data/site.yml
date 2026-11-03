@@ -5,6 +5,10 @@
 meta:
   title: "aissac: software products that survive production"
   description: A studio in Cluj-Napoca building web and mobile products, platforms and the AI features inside them.
+  og_image:
+    src: /assets/img/og.png
+    width: 1200
+    height: 630
 
 wordmark: aissac
 home_label: aissac, back to top
