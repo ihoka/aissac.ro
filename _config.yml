@@ -36,6 +36,7 @@ exclude:
   - .ruby-version
   - tools
   - mise.toml
+  - lighthouserc.json
 
 keep_files:
   - CNAME

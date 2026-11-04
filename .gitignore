@@ -13,3 +13,4 @@ assets/css/site.css
 worker/node_modules/
 worker/.wrangler/
 worker/.dev.vars
+.lighthouseci/
